@@ -23,14 +23,18 @@ public class AuthService {
     public HashMap<String, Object> login(UserVO userVO, HttpSession session) {
         HashMap<String, Object> result = new HashMap<String, Object>();
 
+        System.out.println(userVO);
+
         UserAuthentication authentication = new UserAuthentication(userVO.getUseremail(), AuthorityUtils.createAuthorityList("any"), true);
+
+        // System.out.println(authentication);
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
         session.setAttribute("useremail", userVO.getUseremail());
 
-        System.out.println("session :" + session);
+        // System.out.println("session :" + session);
 
         result.put("result", "success");
 

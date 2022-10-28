@@ -1,15 +1,15 @@
 package com.demo.demo.apis.auth;
 
-import java.util.HashMap;
-
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.demo.demo.service.auth.AuthService;
+import com.demo.demo.service.response.ResponseObject;
 import com.demo.demo.service.user.UserService;
 import com.demo.demo.service.user.UserVO;
 
@@ -24,37 +24,46 @@ public class AuthController {
 
     @RequestMapping("/apis/auth/login")
     public String login(
-        @ModelAttribute("userVO") UserVO userVO,
+        @RequestBody UserVO userVO,
         HttpSession session
     ) throws Throwable {
 
         UserVO user = this.userService.findUser(userVO);
 
-        if(user.get_Id() == null) {
+        if(user == null) {
             return "이메일이 존재하지 않습니다.";
         }
 
-        // HashMap<String, Object> result = this.authService.login(userVO, session);
+        // session.invalidate();
 
-        // System.out.println(result.get("result"));
+        System.out.println(userVO);
+        this.authService.login(userVO, session);
 
-        return userVO.toString();
+        return "로그인 되었습니다.";
     }
 
     @RequestMapping("/apis/auth/signup")
-    public String signup(
-        @ModelAttribute("userVO") UserVO userVO
+    public @ResponseBody ResponseObject signup(
+        // @ModelAttribute("userVO") UserVO userVO
+         @RequestBody UserVO userVO
     ) throws Throwable {
 
-        UserVO user = this.userService.findUser(userVO);
+        UserVO findUser = this.userService.findUser(userVO);
 
-        if(user.get_Id() != null) {
-            return "이미 존재하는 이메일입니다.";
+        ResponseObject ret = new ResponseObject();
+
+        if(findUser != null) {
+            ret.setResultCode("이미 존재하는 이메일입니다.");
+            return ret;
         }
-
 
         userService.insertUser(userVO);
 
-        return "등록 성공";
+        UserVO resultUser = this.userService.findUser(userVO);
+
+        ret.setRes(resultUser);
+        ret.setResultCode("등록 되었습니다.");
+
+        return ret;
     }
 }

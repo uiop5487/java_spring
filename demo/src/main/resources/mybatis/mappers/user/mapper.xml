@@ -9,7 +9,12 @@
     </select>
 
     <select id="findUser" resultType="com.demo.demo.service.user.UserVO">
-        select * from user where useremail=#{useremail}
+        select * from user
+        <where>
+            <if test = "useremail != null">
+                useremail = #{useremail}
+            </if>
+        </where>
     </select>
 
     <insert id="insertUser" parameterType="com.demo.demo.service.user.UserVO">
