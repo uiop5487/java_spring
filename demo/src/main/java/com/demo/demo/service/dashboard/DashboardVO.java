@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Entity( name = "dashboard")
+@Entity( name = "dashboards")
 public class DashboardVO {
 
     @Id
