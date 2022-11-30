@@ -20,7 +20,7 @@ public class UserService {
     BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     private TokenProvider jwtTokenProvider;
 
-    SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd HH:mm:sss.");
+    SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd HH:mm:sss");
     Date time = new Date();
     String localTime = format.format(time);
 
